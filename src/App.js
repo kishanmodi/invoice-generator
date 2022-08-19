@@ -1,25 +1,15 @@
-import logo from './logo.svg';
+import React from 'react';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Container from 'react-bootstrap/Container';
+import { InvoiceForm } from './components/InvoiceForm';
+export default function App() {
+	return (
+		<div className='app d-lfex flex-column align-items-center justify-content-center w-100'>
+			<Container>
+				<InvoiceForm />
+			</Container>
+		</div>
+	);
 }
-
-export default App;
