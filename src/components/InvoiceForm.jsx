@@ -10,7 +10,7 @@ export const InvoiceForm = () => {
     const [items, setItems] = useState([{ id: 0, itemName: '', itemDescription: '', quantity: 1, price: 1 }]);
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
     const [invoiceNum, setInvoiceNum] = useState(1);
-
+    const [isMobile, setIsMobile] = useState(false);
     const [billTo, setBillTo] = useState({
         toWhom: '',
         emailAddress: '',
@@ -33,7 +33,7 @@ export const InvoiceForm = () => {
         total: 1
     });
     useEffect(() => {
-        const subTotal = items.reduce((acc, item) => parseFloat(item.price) + acc, 0);
+        const subTotal = items.reduce((acc, item) => parseFloat(item.price) * parseInt(item.quantity) + acc, 0);
         if (isNaN(subTotal)) {
             setBill({ subTotal: 0, discount: 0, tax: 0, total: 0 });
         } else {
@@ -44,6 +44,22 @@ export const InvoiceForm = () => {
             setBill({ subTotal: subTotal, discount: discountAmount, tax: newTax, total: total });
         }
     }, [items, taxRate, discount]);
+
+    const handleResize = () => {
+        if (window.innerWidth < 720) {
+            setIsMobile(true);
+        } else {
+            setIsMobile(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    });
 
     const itemChangeHandler = (e, index) => {
         const newItems = items.map((item) => {
@@ -108,8 +124,8 @@ export const InvoiceForm = () => {
                                                 name='dateofIssue'
                                                 style={{ maxWidth: '200px', minWidth: '80px' }}
                                                 required
-                                                min={date.dueDate}
-                                                value={date.dueDate}
+                                                min={date}
+                                                value={date}
                                                 onChange={(e) => setDate(e.target.value)}
                                             />
                                         </div>
@@ -436,7 +452,7 @@ export const InvoiceForm = () => {
                                 </select>
                             </div>
                             <div className='mb-2'>
-                                <label className='fw-bold form-label'>Tax rate:</label>
+                                <label className='fw-bold form-label'>Discount:</label>
                             </div>
                             <div className='mb-2 flex-nowrap input-group'>
                                 <input
@@ -453,7 +469,7 @@ export const InvoiceForm = () => {
                                 <span className='bg-light fw-bold text-secondary small input-group-text'>%</span>
                             </div>
                             <div>
-                                <label className='fw-bold form-label'>Discount:</label>
+                                <label className='fw-bold form-label'>Tax Rate:</label>
                             </div>
                             <div className='mb-4 flex-nowrap input-group'>
                                 <input
@@ -482,6 +498,9 @@ export const InvoiceForm = () => {
                 billTo={billTo}
                 items={items}
                 bill={bill}
+                notes={notes}
+                currency={currency}
+                isMobile={isMobile}
             />
         </>
     );

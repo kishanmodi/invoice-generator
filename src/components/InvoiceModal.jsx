@@ -9,17 +9,19 @@ export const InvoiceModal = (props) => {
     function GenerateInvoice() {
         html2canvas(document.querySelector('#invoiceCapture')).then((canvas) => {
             const imgData = canvas.toDataURL('image/png', 1.0);
+            let fmt = props.isMobile ? [600, 1400] : [700, 900];
+
             const pdf = new jsPDF({
                 orientation: 'portrait',
                 unit: 'pt',
-                format: [612, 792]
+                format: fmt
             });
             pdf.internal.scaleFactor = 1;
             const imgProps = pdf.getImageProperties(imgData);
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save('invoice-001.pdf');
+            pdf.save('invoice.pdf');
         });
     }
     return (
@@ -70,8 +72,12 @@ export const InvoiceModal = (props) => {
                                         <tr key={item.id} className='text-end'>
                                             <td>{item.id + 1}</td>
                                             <td>{item.itemName}</td>
-                                            <td className='text-end'>$ {item.price}</td>
-                                            <td className='text-end'>$ {item.price}</td>
+                                            <td className='text-end'>
+                                                {props.currency} {item.price}
+                                            </td>
+                                            <td className='text-end'>
+                                                {props.currency} {item.price}
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -90,7 +96,7 @@ export const InvoiceModal = (props) => {
                                         SUBTOTAL
                                     </td>
                                     <td className='text-end' style={{ width: '100px' }}>
-                                        $ {props.bill.subTotal}
+                                        {props.currency} {props.bill.subTotal}
                                     </td>
                                 </tr>
                                 <tr className='text-end'>
@@ -99,12 +105,13 @@ export const InvoiceModal = (props) => {
                                         TOTAL
                                     </td>
                                     <td className='text-end' style={{ width: '100px' }}>
-                                        $ {props.bill.total}
+                                        {props.currency} {props.bill.total}
                                     </td>
                                 </tr>
                             </tbody>
                         </Table>
                     </div>
+                    <div className='w-100 mx-4 bg-light py-2 px-2 rounded fw-bold'>{props.notes}</div>
                 </div>
                 <div className='row p-3'>
                     <div className='col'>
