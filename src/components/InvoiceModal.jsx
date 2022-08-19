@@ -21,7 +21,11 @@ export const InvoiceModal = (props) => {
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save('invoice.pdf');
+            if (props.isMobile) {
+                pdf.save(`invoice${Math.floor(Math.random() * 100)}.pdf`);
+            } else {
+                window.open(URL.createObjectURL(pdf.output('blob')));
+            }
         });
     }
     return (

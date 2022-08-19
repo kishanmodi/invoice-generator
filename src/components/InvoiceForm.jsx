@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import Card from 'react-bootstrap/Card';
 import { InvoiceModal } from './InvoiceModal';
+import { PriceDisTax } from './PriceDisTax';
+import { CurrencyChange } from './CurrencyChange';
+import { TotalComponent } from './TotalComponent';
+import { ItemInputComponent } from './ItemInputComponent';
+import { ItemBillDetails } from './ItemBillDetails';
+import { Notes } from './Notes';
 
 export const InvoiceForm = () => {
     const [items, setItems] = useState([{ id: 0, itemName: '', itemDescription: '', quantity: 1, price: 1 }]);
@@ -151,94 +156,52 @@ export const InvoiceForm = () => {
                                     <label className='fw-bold' htmlFor='toWhom'>
                                         Bill to:
                                     </label>
-                                    <input
-                                        type='text'
+                                    <ItemBillDetails
                                         placeholder='Who is this invoice to?'
-                                        className='form-control my-2'
                                         name='toWhom'
-                                        value={billTo.toWhom}
-                                        onChange={(e) =>
-                                            setBillTo((prev) => ({
-                                                ...prev,
-                                                [e.target.name]: e.target.value
-                                            }))
-                                        }
-                                        required
-                                    />
-                                    <input
-                                        type='email'
-                                        placeholder='Email Address'
-                                        className='form-control my-2'
-                                        name='emailAddress'
-                                        value={billTo.emailAddress}
-                                        onChange={(e) =>
-                                            setBillTo((prev) => ({
-                                                ...prev,
-                                                [e.target.name]: e.target.value
-                                            }))
-                                        }
-                                        required
-                                    />
-                                    <input
                                         type='text'
+                                        val={billTo.toWhom}
+                                        setInput={setBillTo}
+                                    />
+                                    <ItemBillDetails
+                                        placeholder='Email Address'
+                                        name='emailAddress'
+                                        val={billTo.emailAddress}
+                                        type='email'
+                                        setInput={setBillTo}
+                                    />
+                                    <ItemBillDetails
                                         placeholder='Billing Address'
-                                        className='form-control my-2'
                                         name='billingAddress'
-                                        value={billTo.billingAddress}
-                                        onChange={(e) =>
-                                            setBillTo((prev) => ({
-                                                ...prev,
-                                                [e.target.name]: e.target.value
-                                            }))
-                                        }
-                                        required
+                                        val={billTo.billingAddress}
+                                        type='text'
+                                        setInput={setBillTo}
                                     />
                                 </div>
                                 <div className='col'>
                                     <label className='fw-bold' htmlFor='fromWhom'>
                                         Bill From:
                                     </label>
-                                    <input
-                                        type='text'
+                                    <ItemBillDetails
                                         placeholder='Who is this invoice from?'
-                                        className='form-control my-2'
                                         name='fromWhom'
-                                        value={billFrom.fromWhom}
-                                        onChange={(e) =>
-                                            setBillFrom((prev) => ({
-                                                ...prev,
-                                                [e.target.name]: e.target.value
-                                            }))
-                                        }
-                                        required
-                                    />
-                                    <input
-                                        type='email'
-                                        placeholder='Email Address'
-                                        className='form-control my-2'
-                                        name='emailAddress'
-                                        value={billFrom.emailAddress}
-                                        onChange={(e) =>
-                                            setBillFrom((prev) => ({
-                                                ...prev,
-                                                [e.target.name]: e.target.value
-                                            }))
-                                        }
-                                        required
-                                    />
-                                    <input
                                         type='text'
+                                        val={billFrom.fromWhom}
+                                        setInput={setBillFrom}
+                                    />
+                                    <ItemBillDetails
+                                        placeholder='Email Address'
+                                        name='emailAddress'
+                                        val={billFrom.emailAddress}
+                                        type='email'
+                                        setInput={setBillFrom}
+                                    />
+                                    <ItemBillDetails
                                         placeholder='Billing Address'
-                                        className='form-control my-2'
                                         name='billingAddress'
-                                        value={billFrom.billingAddress}
-                                        onChange={(e) =>
-                                            setBillFrom((prev) => ({
-                                                ...prev,
-                                                [e.target.name]: e.target.value
-                                            }))
-                                        }
-                                        required
+                                        val={billFrom.billingAddress}
+                                        type='text'
+                                        setInput={setBillFrom}
                                     />
                                 </div>
                             </div>
@@ -257,25 +220,20 @@ export const InvoiceForm = () => {
                                             return (
                                                 <tr key={index}>
                                                     <td style={{ width: '70%' }} className='pe-0 input-lg'>
-                                                        <div className='my-1 flex-nowrap input-group'>
-                                                            <input
-                                                                className='form-control'
-                                                                placeholder='Item Name'
-                                                                name='itemName'
-                                                                value={item.itemName}
-                                                                onChange={(e) => itemChangeHandler(e, index)}
-                                                                required
-                                                            />
-                                                        </div>
-                                                        <div className='my-1 flex-nowrap input-group'>
-                                                            <input
-                                                                className='form-control'
-                                                                placeholder='Item Description'
-                                                                name='itemDescription'
-                                                                value={item.itemDescription}
-                                                                onChange={(e) => itemChangeHandler(e, index)}
-                                                            />
-                                                        </div>
+                                                        <ItemInputComponent
+                                                            itemChangeHandler={itemChangeHandler}
+                                                            index={index}
+                                                            name='itemName'
+                                                            placeholder='Item Name'
+                                                            val={item.itemName}
+                                                        />
+                                                        <ItemInputComponent
+                                                            itemChangeHandler={itemChangeHandler}
+                                                            index={index}
+                                                            name='itemDescription'
+                                                            placeholder='Item Description'
+                                                            val={item.itemDescription}
+                                                        />
                                                     </td>
                                                     <td style={{ width: '100px' }} className='pe-0'>
                                                         <div className='my-1 flex-nowrap input-group'>
@@ -378,50 +336,20 @@ export const InvoiceForm = () => {
 
                             <div className='row mt-2 justify-content-end'>
                                 <div className='col-lg-6'>
-                                    <div className='d-flex align-items-start justify-content-between mb-2'>
-                                        <span className='fw-bold'>Subtotal:</span>
-                                        <span>
-                                            {currency}
-                                            {bill.subTotal}
-                                        </span>
-                                    </div>
-                                    <div className='d-flex align-items-start justify-content-between mb-2'>
-                                        <span className='fw-bold'>Discount:</span>
-                                        <span>
-                                            ({discount}%) {currency}
-                                            {bill.discount}
-                                        </span>
-                                    </div>
-                                    <div className='d-flex align-items-start justify-content-between mb-3'>
-                                        <span className='fw-bold'>Tax:</span>
-                                        <span>
-                                            ({taxRate}%) {currency}
-                                            {bill.tax}
-                                        </span>
-                                    </div>
+                                    <TotalComponent name='Sub Total:' currency={currency} val={bill.subTotal} />
+                                    <TotalComponent
+                                        name='Discount:'
+                                        currency={currency}
+                                        val={bill.discount}
+                                        extra={discount}
+                                    />
+                                    <TotalComponent name='Tax:' currency={currency} val={bill.tax} extra={taxRate} />
                                     <hr className='my-3' />
-                                    <div className='d-flex align-items-start justify-content-between my-3'>
-                                        <span className='fw-bold'>Total:</span>
-                                        <span className='fw-bold'>
-                                            {currency}
-                                            {bill.total}
-                                        </span>
-                                    </div>
+                                    <TotalComponent name='Total:' currency={currency} val={bill.total} />
                                 </div>
                             </div>
                             <hr className='mt-4' />
-                            <label className='fw-bold form-label'>Notes:</label>
-                            <textarea
-                                className='form-control'
-                                name='notes'
-                                id='notes'
-                                cols='30'
-                                rows='1'
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                                placeholder='Thanks for your Business!!'
-                            ></textarea>
-                            <div></div>
+                            <Notes notes={notes} setNotes={setNotes} />
                         </Card>
                     </Col>
                     <Col lg={3} md={4}>
@@ -432,59 +360,9 @@ export const InvoiceForm = () => {
                             <div className='mb-3 mt-4'>
                                 <hr />
                             </div>
-                            <div className='mb-3'>
-                                <label className='fw-bold form-label'>Currency:</label>
-                                <select
-                                    className='btn btn-light form-select'
-                                    value={currency}
-                                    onChange={(e) => setCurrency(e.target.value)}
-                                >
-                                    ₹<option value='₹'>INR (Indian Rupee)</option>
-                                    <option value='¥'>JPY (Japanese Yen)</option>
-                                    <option value='$'>USD (United States Dollar)</option>
-                                    <option value='£'>GBP (British Pound Sterling)</option>
-                                    <option value='¥'>JPY (Japanese Yen)</option>
-                                    <option value='$'>CAD (Canadian Dollar)</option>
-                                    <option value='$'>AUD (Australian Dollar)</option>
-                                    <option value='$'>SGD (Signapore Dollar)</option>
-                                    <option value='¥'>CNY (Chinese Renminbi)</option>
-                                    <option value='₿'>BTC (Bitcoin)</option>
-                                </select>
-                            </div>
-                            <div className='mb-2'>
-                                <label className='fw-bold form-label'>Discount:</label>
-                            </div>
-                            <div className='mb-2 flex-nowrap input-group'>
-                                <input
-                                    name='taxRate'
-                                    placeholder='0.0'
-                                    min='0.00'
-                                    step='0.01'
-                                    max='100.00'
-                                    type='number'
-                                    className='bg-white border form-control'
-                                    value={discount}
-                                    onChange={(e) => setDiscount(e.target.value)}
-                                />
-                                <span className='bg-light fw-bold text-secondary small input-group-text'>%</span>
-                            </div>
-                            <div>
-                                <label className='fw-bold form-label'>Tax Rate:</label>
-                            </div>
-                            <div className='mb-4 flex-nowrap input-group'>
-                                <input
-                                    name='discountRate'
-                                    placeholder='0.0'
-                                    min='0.00'
-                                    step='0.01'
-                                    max='100.00'
-                                    type='number'
-                                    className='bg-white border form-control'
-                                    value={taxRate}
-                                    onChange={(e) => setTaxRate(e.target.value)}
-                                />
-                                <span className='bg-light fw-bold text-secondary small input-group-text'>%</span>
-                            </div>
+                            <CurrencyChange currency={currency} setCurrency={setCurrency} />
+                            <PriceDisTax val={discount} changeRate={setDiscount} icon='%' label='Discount' />
+                            <PriceDisTax val={taxRate} changeRate={setTaxRate} icon='%' label='Tax Rate:' />
                         </div>
                     </Col>
                 </Row>
